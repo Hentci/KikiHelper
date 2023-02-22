@@ -8,6 +8,7 @@ import datetime
 
 def steal(session_id, dept, grade, page, cge_cate, cge_subcate, course):
     res = requests.post("https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Add_Course01.cgi", "session_id="+session_id+"&dept="+dept+"&grade="+grade+"&cge_cate="+cge_cate+"&cge_subcate="+cge_subcate+"&page="+page+"&SelectTag=1&course="+course+"&"+course+"=3")
+    res.encoding('utf8')
     soup = BeautifulSoup(res.text, 'lxml')
     a = soup.find_all("a", attrs={"href":"javascript:history.back()"})
     print(a)
@@ -58,7 +59,7 @@ def runSteal(session, dept, grade, page, cate, sub_cate, course, discord_webhook
                 if error_count >= 10 and error_count % 5 == 0 and discord_webhook != "":
                     requests.post(discord_webhook, data={"content":"error running on {time}, {course}, err_count:{errorTime}".format(time=datetime.datetime.now(), course=course, errorTime=error_count)})
 
-        else:
+        else:   
             print("soup data error format!!")
         s.enter(1, 1, do_something, (sc,))
 
